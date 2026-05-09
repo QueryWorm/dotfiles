@@ -1,0 +1,64 @@
+# mkdir + cd
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
+mkdated() {
+  local folder_name="$(date +%F)_$1"
+  mkdir -p "$folder_name"
+  cd "$folder_name"
+}
+# Быстро создать скрипт с шебангом и открыть в редакторе
+mksh() {
+  local name="$1"
+  local dir="$HOME/bin"
+  local file
+
+  if [[ -z "$name" ]]; then
+    echo "Usage: mksh <script_name>" >&2
+    return 1
+  fi
+
+  mkdir -p "$dir"
+  file="$dir/$name"
+
+  if [[ -e "$file" ]]; then
+    echo "$file already exists" >&2
+    return 1
+  fi
+
+  cat > "$file" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+EOF
+
+  chmod +x "$file"
+  "$EDITOR" "$file"
+}
+
+
+# cd + открыть директорию в файловом менеджере
+cdf() {
+  cd "$1" && xdg-open .
+}
+#Показать файлы по маске (как дир почти))
+#lf() {
+#    printf '  %s\n' "$@"
+#}
+lf() {
+    printf '  %s\n' *"$1"
+}
+
+setip () {
+    if [ -z "$1" ]; then
+        echo "usage: setip <ip>"
+        return
+    fi
+    echo "export IP=$1" > ~/.session_vars
+    source ~/.session_vars
+}
+
+getip () {
+    echo $IP
+}
