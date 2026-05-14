@@ -1,0 +1,9 @@
+autoload -U colors && colors
+
+export PS1="%F{cyan}%n@%m %F{yellow}%~ %# %f"
+
+alias ls='ls --color=auto'
+alias ll='ls -lah --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
