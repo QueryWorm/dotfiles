@@ -78,11 +78,5 @@ fi
 echo ""
 echo "=== готово: роль '$ROLE' ==="
 
-if [ -z "$(git config --global user.email)" ]; then
-  read -p "git user.email (например noreply-адрес с GitHub): " GITEMAIL
-  git config --global user.email "$GITEMAIL"
-fi
-if [ -z "$(git config --global user.name)" ]; then
-  read -p "git user.name: " GITNAME
-  git config --global user.name "$GITNAME"
-fi
+git config --global user.email "222608355+QueryWorm@users.noreply.github.com"
+git config --global user.name "QueryWorm"
