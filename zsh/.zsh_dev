@@ -1,0 +1,25 @@
+# DEV convention: единая точка для кода, venv всегда внутри проекта
+export DEV="${DEV:-$HOME/DEV}"
+
+mkproject() {
+  local name="$1"
+  if [[ -z "$name" ]]; then
+    echo "usage: mkproject <name>" >&2
+    return 1
+  fi
+  mkdir -p "$DEV/$name"
+  cd "$DEV/$name"
+  python3 -m venv .venv
+  echo "→ $DEV/$name (.venv готов)"
+}
+
+venvon() {
+  if [[ -f .venv/bin/activate ]]; then
+    source .venv/bin/activate
+  elif [[ -f venv/bin/activate ]]; then
+    source venv/bin/activate
+  else
+    echo "venv не найден в $(pwd)" >&2
+    return 1
+  fi
+}
