@@ -53,8 +53,14 @@ mkdir -p ~/dotfiles/zsh/hosts
 touch ~/dotfiles/zsh/hosts/$ROLE.zsh
 
 BOOTSTRAP_MARK="# dotfiles bootstrap"
-if ! grep -q "$BOOTSTRAP_MARK" ~/.zshrc 2>/dev/null; then
-  cat > ~/.zshrc << ZSHEOF
+if [ -f ~/.zshrc ] && grep -q "$BOOTSTRAP_MARK" ~/.zshrc 2>/dev/null; then
+  echo "-> .zshrc уже содержит dotfiles bootstrap, не трогаю (правь руками если нужно)"
+else
+  if [ -f ~/.zshrc ] && [ -s ~/.zshrc ]; then
+    cp ~/.zshrc ~/.zshrc.bak.$(date +%Y%m%d%H%M%S)
+    echo "-> существующий .zshrc сохранён в бэкап"
+  fi
+  cat > ~/.zshrc.new << ZSHEOF
 $BOOTSTRAP_MARK
 source ~/dotfiles/zsh/.zsh_env
 source ~/dotfiles/zsh/.zsh_ui
@@ -64,10 +70,12 @@ source ~/dotfiles/zsh/.zsh_dev
 DOTFILES_ROLE="$ROLE"
 [[ -f ~/dotfiles/zsh/hosts/\$DOTFILES_ROLE.zsh ]] && \\
   source ~/dotfiles/zsh/hosts/\$DOTFILES_ROLE.zsh
+
+# --- ниже сохранённое из предыдущего .zshrc (машинно-локальное) ---
 ZSHEOF
-  echo "-> .zshrc записан"
-else
-  echo "-> .zshrc уже содержит dotfiles bootstrap, не трогаю (правь руками если нужно)"
+  [ -f ~/.zshrc ] && cat ~/.zshrc >> ~/.zshrc.new
+  mv ~/.zshrc.new ~/.zshrc
+  echo "-> .zshrc записан (старое содержимое сохранено ниже bootstrap-блока)"
 fi
 
 if [ "$SHELL" != "$(which zsh)" ]; then
