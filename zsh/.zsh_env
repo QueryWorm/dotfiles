@@ -1,6 +1,6 @@
 # Переменные окружения
-export EDITOR=mousepad          # редактор по умолчанию
-export VISUAL="$EDITOR"    # для GUI приложений
+export EDITOR=nano
+export VISUAL="$EDITOR"
 export PATH="$HOME/bin:$PATH"
 
 
